@@ -91,9 +91,9 @@ lib/
 ### 📸 Tampilan Aplikasi Pertemuan 3
 
 #### 1. Halaman Login
-![Halaman Login](./Screenshot%202026-11-02%20123742.png)
+![Halaman Login](./login_page.png)
 
 #### 2. Halaman Home (User Logged In)
-![Halaman Home](./Screenshot%202026-11-02%20123803.png)
+![Halaman Home](./page_admin.png)
 
 ---
