@@ -97,3 +97,82 @@ lib/
 ![Halaman Home](./page_admin.png)
 
 ---
+
+## 📌 Pertemuan 4: Integrasi REST API (Registrasi, Login, dan Katalog Produk)
+
+Pada modul ini dilakukan integrasi aplikasi Flutter dengan REST API backend (CodeIgniter 4) untuk proses autentikasi (Registrasi & Login), penanganan Token Bearer (JWT) yang disimpan di local storage via `shared_preferences`, serta pengambilan data katalog produk secara asinkron menggunakan package `http`.
+
+### 🚀 Fitur & Komponen Pertemuan 4
+- **Helper & Layanan API (`lib/helpers/` & `lib/service/`)**:
+  - `api.dart`: Helper HTTP client untuk method `GET`, `POST`, dan `DELETE` lengkap dengan handling exception (`app_exception.dart`) dan injeksi Authorization Bearer token.
+  - `api_url.dart`: Konfigurasi endpoint REST API backend.
+  - `user_info.dart`: Manajemen sesi autentikasi (penyimpanan token, user ID, dan fungsi logout) menggunakan `shared_preferences`.
+  - `login_service.dart`, `registrasi_service.dart`, `produk_service.dart`: Layanan untuk komunikasi data API dengan parsing model.
+- **Model Data (`lib/model/`)**:
+  - `login.dart`: Representasi data respons login (token, userID, userEmail).
+  - `registrasi.dart`: Representasi data respons registrasi pengguna baru.
+  - `produk.dart`: Representasi data produk (id, kode produk, nama produk, harga produk).
+- **Antarmuka Pengguna (`lib/ui/`)**:
+  - `registrasi_page.dart`: Form registrasi pengguna baru dengan validasi form dan feedback dialog.
+  - `login_page.dart`: Form login yang memvalidasi user, menyimpan token, dan mengarahkan ke katalog produk.
+  - `produk_page.dart`: Menampilkan daftar produk dari REST API menggunakan `FutureBuilder` & `ListView`, serta tombol Logout pada AppBar.
+  - `produk_form.dart` & `produk_detail.dart`: Form pembuatan/detail informasi produk.
+
+### 🛠️ Struktur Folder Proyek (Terbaru)
+
+```plaintext
+lib/
+├── helpers/
+│   ├── api.dart
+│   ├── api_url.dart
+│   ├── app_exception.dart
+│   └── user_info.dart
+├── model/
+│   ├── login.dart
+│   ├── produk.dart
+│   └── registrasi.dart
+├── service/
+│   ├── login_service.dart
+│   ├── produk_service.dart
+│   └── registrasi_service.dart
+├── ui/
+│   ├── login_page.dart
+│   ├── registrasi_page.dart
+│   ├── produk_page.dart
+│   ├── produk_form.dart
+│   └── produk_detail.dart
+├── about_page.dart
+├── column_widget.dart
+├── hello_world.dart
+├── home_page.dart
+├── main.dart
+├── row_widget.dart
+└── sidemenu.dart
+```
+
+### 💻 Cara Menjalankan Proyek (Pertemuan 4)
+
+1. Pastikan backend REST API (CodeIgniter 4) sudah berjalan di `http://localhost:8080`.
+2. Jalankan aplikasi Flutter di browser (Chrome / Edge):
+   ```bash
+   flutter run -d chrome
+   ```
+   *atau*
+   ```bash
+   flutter run -d edge
+   ```
+
+### 📸 Tampilan Aplikasi Pertemuan 4
+
+#### 1. Halaman Login
+![Halaman Registrasi](./login2_page.png)
+
+#### 2. Halaman List Produk
+![Halaman List Produk](./list_produk.png)
+
+
+#### 3. Halaman Tambah Produk
+![Halama Tambah Produk](./tambah_produk.png)
+
+
+---
