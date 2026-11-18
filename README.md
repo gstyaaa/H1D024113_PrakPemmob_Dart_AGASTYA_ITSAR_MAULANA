@@ -165,7 +165,7 @@ lib/
 ### 📸 Tampilan Aplikasi Pertemuan 4
 
 #### 1. Halaman Login
-![Halaman Registrasi](./login2_page.png)
+![Halaman Registrasi](./login_page.png)
 
 #### 2. Halaman List Produk
 ![Halaman List Produk](./list_produk.png)
@@ -173,6 +173,102 @@ lib/
 
 #### 3. Halaman Tambah Produk
 ![Halama Tambah Produk](./tambah_produk.png)
+
+
+#### 4. Halaman Detail Produk
+![Halama Detail Produk](./detail_produk.png)
+
+
+#### 5. Halaman Ubah Produk
+![Halama Ubah Produk](./ubah_produk.png)
+
+
+---
+
+## 📌 Pertemuan 5: CRUD Module Flutter Bagian 2 (Integrasi Penuh dengan REST API)
+
+Pada modul ini dilakukan penyempurnaan arsitektur aplikasi menjadi berlapis (*layered architecture*): **UI → Bloc → Helpers**. Registrasi dan login kini berfungsi penuh dengan penyimpanan token (JWT) di local storage, seluruh operasi CRUD produk terhubung end-to-end ke REST API backend (CodeIgniter 4), serta dilengkapi dialog feedback sukses/gagal yang reusable. Halaman awal aplikasi menjadi dinamis: mengecek token tersimpan untuk menentukan masuk ke halaman Login atau langsung ke List Produk.
+
+### 🚀 Fitur & Komponen Pertemuan 5
+- **Helper & Layanan API (`lib/helpers/`)**:
+  - `api.dart`: HTTP client (`GET`/`POST`/`DELETE`) dengan injeksi header Authorization Bearer token dari local storage pada setiap request, serta penerjemahan status code (200/400/401/403/422/500) menjadi exception yang bermakna.
+  - `api_url.dart`: Pusat konfigurasi endpoint (baseUrl, registrasi, login, CRUD produk).
+  - `user_info.dart`: Manajemen sesi (set/get token & userID, logout/clear) via `shared_preferences`.
+  - `app_exception.dart`: Hierarki exception (`FetchDataException`, `BadRequestException`, `UnauthorisedException`, `InvalidInputException`) untuk penanganan error yang rapi.
+- **Bloc / Controller (`lib/bloc/`)**:
+  - `registrasi_bloc.dart`: Kirim data registrasi ke API, parsing respons ke model.
+  - `login_bloc.dart`: Proses autentikasi, menghasilkan objek `Login` (token + data user).
+  - `logout_bloc.dart`: Menghapus sesi dari local storage.
+  - `produk_bloc.dart`: Empat operasi CRUD produk — `getProduks()` (list), `addProduk()` (create), `updateProduk()` (update), `deleteProduk()` (delete).
+- **Widget Reusable (`lib/widget/`)**:
+  - `success_dialog.dart`: Dialog "SUKSES" (hijau) untuk umpan balik berhasil.
+  - `warning_dialog.dart`: Dialog "GAGAL" (merah) untuk umpan balik kegagalan.
+- **Antarmuka Pengguna (`lib/ui/`)**:
+  - `main.dart`: *Gatekeeper* sesi — jika token ada maka buka List Produk, jika tidak buka halaman Login.
+  - `registrasi_page.dart` & `login_page.dart`: Tombol submit kini berfungsi (`_submit()`), lengkap dengan dialog sukses/gagal; login menyimpan token & userID lalu `pushReplacement` ke List Produk.
+  - `produk_page.dart`: Menampilkan data produk asli dari REST API menggunakan `FutureBuilder` + `ListView.builder`, serta fungsi Logout di drawer.
+  - `produk_form.dart`: Satu form dua mode — TAMBAH (simpan) dan UBAH (update), dengan pre-fill data saat mode edit.
+  - `produk_detail.dart`: Detail produk dengan tombol EDIT dan DELETE (konfirmasi hapus via AlertDialog).
+
+### 🛠️ Struktur Folder Proyek (Terbaru)
+
+```plaintext
+lib/
+├── bloc/
+│   ├── login_bloc.dart
+│   ├── logout_bloc.dart
+│   ├── produk_bloc.dart
+│   └── registrasi_bloc.dart
+├── helpers/
+│   ├── api.dart
+│   ├── api_url.dart
+│   ├── app_exception.dart
+│   └── user_info.dart
+├── model/
+│   ├── login.dart
+│   ├── produk.dart
+│   └── registrasi.dart
+├── ui/
+│   ├── login_page.dart
+│   ├── registrasi_page.dart
+│   ├── produk_page.dart
+│   ├── produk_form.dart
+│   └── produk_detail.dart
+├── widget/
+│   ├── success_dialog.dart
+│   └── warning_dialog.dart
+├── about_page.dart
+├── column_widget.dart
+├── hello_world.dart
+├── home_page.dart
+├── main.dart
+├── row_widget.dart
+└── sidemenu.dart
+```
+
+### 💻 Cara Menjalankan Proyek (Pertemuan 5)
+
+1. Pastikan backend REST API (CodeIgniter 4) sudah berjalan dan database siap.
+2. Perhatikan konfigurasi `baseUrl` di `lib/helpers/api_url.dart`:
+   - Emulator Android: `http://10.0.2.2/toko-api/public` (`10.0.2.2` = alias localhost komputer host dari dalam emulator)
+   - Browser (Chrome/Edge): gunakan `http://localhost/toko-api/public`
+   - HP fisik: gunakan IP LAN komputer (misal `http://192.168.1.x/toko-api/public`)
+3. Jalankan aplikasi:
+   ```bash
+   flutter run -d emulator-5554
+   ```
+   *atau*
+   ```bash
+   flutter run -d chrome
+   ```
+
+### 📸 Tampilan Aplikasi Pertemuan 5
+
+#### 1. Dialog Login Gagal
+![Dialog Login Berhasil](./login_berhasil.png)
+
+#### 2. Halaman List Produk (Data dari REST API)
+![Dialog Login Gagal](./login_gagal.png)
 
 
 ---
